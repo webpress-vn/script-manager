@@ -18,9 +18,16 @@ class ScriptController extends ApiController
     protected $validator;
     public function __construct(ScriptRepository $repository, ScriptValidator $validator)
     {
-        $this->repository  = $repository;
-        $this->entity      = $repository->getEntity();
-        $this->validator   = $validator;
+        $this->repository = $repository;
+        $this->entity     = $repository->getEntity();
+        $this->validator  = $validator;
+        if (config('script.auth_middleware.admin.middleware') !== '') {
+            $this->middleware(
+                config('script.auth_middleware.admin.middleware'),
+                ['except' => config('script.auth_middleware.admin.except')]
+            );
+        }
+
         $this->transformer = ScriptTransformer::class;
     }
 

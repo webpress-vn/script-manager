@@ -5,6 +5,7 @@ namespace VCComponent\Laravel\Script\Providers;
 use Illuminate\Support\ServiceProvider;
 use VCComponent\Laravel\Script\Repositories\ScriptRepository;
 use VCComponent\Laravel\Script\Repositories\ScriptRepositoryEloquent;
+use VCComponent\Laravel\Script\Services\Script;
 
 class ScriptServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,6 @@ class ScriptServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(ScriptRepository::class, ScriptRepositoryEloquent::class);
-
+        $this->app->bind('script', Script::class);
     }
 }

@@ -25,5 +25,5 @@ return [
             'except'     => [],
         ],
     ],
-
+    'script_key' => [],
 ];
