@@ -2,11 +2,14 @@
 
 namespace VCComponent\Laravel\Script\Services;
 
+use Illuminate\Support\Facades\Cache;
+
 class Script
 {
-    protected $data = [];
-
-    protected $getScripts = ['head', 'beforebody', 'afterbody'];
+    protected $data         = [];
+    protected $getScripts   = ['head', 'beforebody', 'afterbody'];
+    protected $cache        = false;
+    protected $cacheMinutes = 60;
 
     public function __construct()
     {
@@ -15,10 +18,15 @@ class Script
             $this->data = $this->data->push(['position' => $script, 'content' => null, 'fetched' => false]);
         }
 
-        if(config('script.script_key') !== []){
+        if (config('script.script_key') !== []) {
             foreach (config('script.script_key') as $key) {
                 $this->data = $this->data->push(['position' => $key, 'content' => null, 'fetched' => false]);
             }
+        }
+
+        if (isset(config('script.cache')['enabled']) === true) {
+            $this->cache     = true;
+            $this->timeCache = config('script.cache')['minutes'] ? config('script.cache')['minutes'] * 60 : $this->cacheMinutes * 60;
         }
     }
 
@@ -64,12 +72,25 @@ class Script
 
     public function fetch()
     {
+        if ($this->cache === true) {
+            if (Cache::has('scriptFetched') && Cache::get('scriptFetched')->count() !== 0) {
+                return Cache::get('scriptFetched');
+            }
+            return Cache::remember('scriptFetched', $this->timeCache, function () {
+                return $this->fetchExcute();
+            });
+        }
+        return $this->fetchExcute();
+    }
+
+    public function fetchExcute()
+    {
         $un_fetched = $this->data->filter(function ($value, $key) {
             return $value['fetched'] == false;
         });
 
         if ($un_fetched->count()) {
-            $items      = \VCComponent\Laravel\Script\Entities\Script::whereIn('position', $un_fetched->pluck('position'))->get();
+            $items      = \VCComponent\Laravel\Script\Entities\Script::select('position', 'content')->whereIn('position', $un_fetched->pluck('position'))->get();
             $this->data = $this->data->map(function ($d) use ($items) {
                 $found = $items->search(function ($i) use ($d) {
                     return $i->position === $d['position'];

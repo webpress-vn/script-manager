@@ -25,5 +25,9 @@ return [
             'except'     => [],
         ],
     ],
-    'script_key' => [],
+    'script_key'      => [],
+    'cache'           => [
+        'enabled' => true,
+        'minutes' => 30,
+    ],
 ];
