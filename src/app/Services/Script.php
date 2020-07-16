@@ -24,7 +24,7 @@ class Script
             }
         }
 
-        if (isset(config('script.cache')['enabled']) === true) {
+        if (config('script.cache')['enabled'] === true) {
             $this->cache     = true;
             $this->timeCache = config('script.cache')['minutes'] ? config('script.cache')['minutes'] * 60 : $this->cacheMinutes * 60;
         }
