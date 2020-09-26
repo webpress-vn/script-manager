@@ -48,7 +48,6 @@ class Script
             $result = $this->data->get($item);
 
             return $result['content'];
-
         } else {
             $item = $this->data->get($found);
             if ($item['fetched'] === true) {
@@ -90,7 +89,7 @@ class Script
         });
 
         if ($un_fetched->count()) {
-            $items      = \VCComponent\Laravel\Script\Entities\Script::select('position', 'content')->whereIn('position', $un_fetched->pluck('position'))->get();
+            $items      = \VCComponent\Laravel\Script\Entities\Script::select('position', 'content', 'status')->where('status', 1)->whereIn('position', $un_fetched->pluck('position'))->get();
             $this->data = $this->data->map(function ($d) use ($items) {
                 $found = $items->search(function ($i) use ($d) {
                     return $i->position === $d['position'];
