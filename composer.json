@@ -22,8 +22,8 @@
         }
     },
     "require": {
-        "webpress/core": "^2.1",
-        "cviebrock/eloquent-sluggable": "7.0.1"
+        "cviebrock/eloquent-sluggable": "7.0.1",
+        "webpress/core": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "8.5.13",
