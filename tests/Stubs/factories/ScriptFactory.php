@@ -9,7 +9,7 @@ $factory->define(Script::class, function (Faker $faker) {
     return [
         'title'     => $faker->name,
         'position'   => $faker->word,
-        'status'    => 1,
+        'status'    => rand(1,3),
         'content'   => $faker->paragraphs(rand(4, 7), true),
     ];
 });
