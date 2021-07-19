@@ -91,14 +91,18 @@ class Script
         if ($un_fetched->count()) {
             $items      = \VCComponent\Laravel\Script\Entities\Script::select('position', 'content', 'status')->where('status', 1)->whereIn('position', $un_fetched->pluck('position'))->get();
             $this->data = $this->data->map(function ($d) use ($items) {
-                $found = $items->search(function ($i) use ($d) {
+                $position_contents = $items->filter(function ($i) use ($d) {
                     return $i->position === $d['position'];
                 });
-                if ($found !== false) {
+                if ($position_contents->count()) {
+                    $content = '';
+                    foreach ($position_contents as $position_content) {
+                        $content .= $position_content->content.PHP_EOL;
+                    }
 
                     return [
-                        'position' => $items->get($found)->position,
-                        'content'  => $items->get($found)->content,
+                        'position' => $d['position'],
+                        'content'  => $content,
                         'fetched'  => true,
                     ];
                 } else {
