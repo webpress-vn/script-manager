@@ -13,10 +13,16 @@ class ScriptServiceTest extends TestCase {
     
     /** @test */
     public function can_get_script() {
-        $script = factory(EntitiesScript::class)->state('head')->create();
-
-        $get_script = Script::get_Script('head');
+        $scripts = factory(EntitiesScript::class, 2)->state('head')->create([
+            'status' => '1',
+            'content' => 'content',
+        ]);
         
-        $this->assertEquals($script['content'], $get_script);
+        $content = "";
+        foreach ($scripts as $script) {
+            $content .= $script->content.PHP_EOL;
+        }
+        $get_script = Script::get_Script('head');
+        $this->assertEquals($get_script, $content);
     }
 }
