@@ -51,7 +51,7 @@ class ScriptRepositoryEloquent extends BaseRepository implements ScriptRepositor
     {
         $data = $request->all();
 
-        $result = $this->whereIn("id", $request->id)->update(['status' => $data['status']]);
+        $result = $this->model->whereIn("id", $request->id)->update(['status' => $data['status']]);
 
         return $result;
     }

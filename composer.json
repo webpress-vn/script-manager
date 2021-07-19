@@ -18,10 +18,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "VCComponent\\Laravel\\Package\\Test\\": "tests/"
+            "VCComponent\\Laravel\\Script\\Test\\": "tests/"
         }
     },
     "require": {
+        "cviebrock/eloquent-sluggable": "7.0.1",
         "webpress/core": "^3.0"
     },
     "require-dev": {
